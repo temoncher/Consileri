@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Войти</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content> 
+    <ion-row align-items-center style="height: 100%">
+      <ion-col>
+        <ion-row margin-vertical justify-content-center>
+            <h2>Консильери</h2>  
+        </ion-row>
+        <form #form="ngForm" (ngSubmit)="login(form)">
+          <ion-row justify-content-center>
+              <div padding>
+                <ion-item>
+                  <ion-input name="email" type="email" placeholder="Почта" [(ngModel)]="Email" required></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input name="password" type="password" placeholder="Пароль" [(ngModel)]="Password" required></ion-input>
+                </ion-item>
+                <ion-item>
+                  <ion-input name="confirm" type="password" placeholder="Подтверди пароль" ngModel required></ion-input>
+                </ion-item>
+              </div>
+          </ion-row>
+          <ion-row margin-vertical justify-content-center class="ion-text-center">
+              <ion-button type="submit" shape="round">Войти</ion-button> <!--[disabled]="form.invalid"-->
+          </ion-row>
+        </form>
+        <ion-row justify-content-center class="ion-text-center">
+            <p>Еще нет аккаунта?</p>
+        </ion-row>
+        <ion-row justify-content-center class="ion-text-center">
+            <a [routerLink]="['/register']" routerDirection="forward">зарегистрироваться</a>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+</ion-content>
+  
