@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: '',
     component: ClubsPage,
+    pathMatch: 'full'
+  },
+  {
+    path: '',
     children: [
       { path: 'create', loadChildren: './create/create.module#CreatePageModule' },
       { path: 'list', loadChildren: './list/list.module#ListPageModule' }

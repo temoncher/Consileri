@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ClubsService } from 'src/app/core/clubs.service';
+
+import { Club } from '../../../models/club';
 
 @Component({
   selector: 'app-list',
@@ -7,7 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListPage implements OnInit {
 
-  constructor() { }
+  clubs: Club[];
+
+  constructor( public clubsService: ClubsService) {
+    this.clubs = clubsService.getAllClubs();
+  }
 
   ngOnInit() {
   }

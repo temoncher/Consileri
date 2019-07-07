@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from '../core/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -10,15 +10,15 @@ export class RegisterPage implements OnInit {
 
   Email: '';
   Password: '';
+  NickName: '';
 
-  constructor( public afAuth: AngularFireAuth) { }
+  constructor( public auth: AuthService) { }
 
   ngOnInit() {
   }
 
   async register() {
-    const user = await this.afAuth.auth.createUserWithEmailAndPassword(this.Email, this.Password);
-    console.log(user);
+    this.auth.emailRegister('', this.NickName, this.Email, this.Password);
   }
 
 }

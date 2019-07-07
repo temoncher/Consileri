@@ -9,11 +9,14 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+// Core module
+import { CoreModule } from './core/core.module';
+
 // Firebase App (the core Firebase SDK) is always required and must be listed first
-import firebaseConfig from './firebaseConfig';
 import { AngularFireModule } from '@angular/fire';
+import firebaseConfig from './firebaseConfig';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,15 +25,15 @@ import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/fi
     BrowserModule,
     IonicModule.forRoot(),
     AngularFireModule.initializeApp(firebaseConfig),
-    AngularFireAuthModule,
+    CoreModule,
     AppRoutingModule,
+    AngularFireAuthModule,
     AngularFirestoreModule
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: FirestoreSettingsToken, useValue: {} }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
 })

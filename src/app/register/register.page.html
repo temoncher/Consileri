@@ -14,7 +14,7 @@
           <ion-row justify-content-center>
               <div padding>
                 <ion-item>
-                  <ion-input name="nick" type="text" placeholder="Псевдоним" ngModel required></ion-input>
+                  <ion-input name="nick" type="text" placeholder="Псевдоним" [(ngModel)]="NickName" required></ion-input>
                 </ion-item>
                 <ion-item>
                   <ion-input name="email" type="email" placeholder="Почта" [(ngModel)]="Email" required></ion-input>

@@ -1,9 +1,32 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>create</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Создать</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
 
+<ion-content> 
+  <ion-row align-items-center style="height: 100%">
+    <ion-col>
+      <ion-row margin-vertical justify-content-center>
+          <h2>Назови свой клуб!</h2>  
+      </ion-row>
+      <form #form="ngForm" (ngSubmit)="createClub()">
+        <ion-row justify-content-center>
+            <div padding>
+              <ion-item>
+                <ion-input name="name" type="text" placeholder="Название" [(ngModel)]="Name" required></ion-input>
+              </ion-item>
+            </div>
+        </ion-row>
+        <ion-row margin-vertical justify-content-center class="ion-text-center">
+            <ion-button type="submit" shape="round">Создать</ion-button> <!--[disabled]="form.invalid"-->
+        </ion-row>
+      </form>
+    </ion-col>
+  </ion-row>
 </ion-content>
+
