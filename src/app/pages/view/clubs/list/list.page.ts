@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ClubsService } from 'src/app/core/clubs.service';
 
-import { Club } from '../../../models/club';
+import { Club } from '../../../../models/club';
 
 @Component({
   selector: 'app-list',

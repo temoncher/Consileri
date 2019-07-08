@@ -26,7 +26,8 @@ export class ClubsService {
 
   createClub(clubName: string) {
     const data: Club = {
-      uid: '',
+      type: 'club',
+      id: '',
       name: clubName,
       rating: 0,
       creator: this.user.uid,

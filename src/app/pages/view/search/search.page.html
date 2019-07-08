@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Поиск</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-searchbar [(ngModel)]="searchTerm" (ionChange)="searchChanged($event)"></ion-searchbar>
+
+  <ion-chip (click)="typeAll()">Все</ion-chip>
+  <ion-chip (click)="typeClub()">Клуб</ion-chip>
+  <ion-chip (click)="typePlayer()">Игрок</ion-chip>
+  <ion-chip (click)="typeGame()">Игра</ion-chip>
+
+  <ion-list>
+    <div *ngFor="let item of results">
+      <ion-item button *ngIf="item.type == 'club'" [routerLink]="['/club', item.id]" routerLinkActive="router-link-active">
+          <ion-avatar slot="start"></ion-avatar>
+          <ion-label>
+            <h3>{{ item.name }}</h3>
+            Don: {{ item.creator }}
+          </ion-label>
+          <ion-icon slot="end" name="contacts"></ion-icon>
+      </ion-item>
+        
+      <ion-item button *ngIf="item.type == 'player'" [routerLink]="['/user', item.id]" routerLinkActive="router-link-active">
+          <ion-avatar slot="start">
+            <img [src]='item.photoURL'>
+          </ion-avatar>
+          <ion-label>
+            <h3>{{ item.nickName }}</h3>
+            E-mail: {{ item.email }}
+          </ion-label>
+          <ion-icon slot="end" name="contact"></ion-icon>
+      </ion-item>
+        
+      <ion-item button *ngIf="item.type == 'game'" [routerLink]="['/game', item.id]" routerLinkActive="router-link-active">
+          <ion-icon slot="start" name="play"></ion-icon>
+          <ion-label>
+            <h3>ID: {{ item.id }}</h3>
+          </ion-label>
+      </ion-item>
+    </div>
+  </ion-list>
+</ion-content>

@@ -1,5 +1,6 @@
 export class User {
-    uid: string;
+    type = 'player';
+    id: string;
     email: string;
     clubs: any;
     nickName: string;

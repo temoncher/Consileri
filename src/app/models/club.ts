@@ -1,5 +1,6 @@
 export class Club {
-    uid: string;
+    type = 'club';
+    id: string;
     name: string;
     rating: number;
     creator: string;

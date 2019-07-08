@@ -80,6 +80,7 @@ export class AuthService {
   }
 
   emailRegister(userPhotoURL: string, userNickName: string, userEmail: string, userPassword: string) {
+    console.log(userPhotoURL);
     return this.afAuth.auth.createUserWithEmailAndPassword(userEmail, userPassword)
       .then((credential) => {
         this.updateUserDataByEmail(credential.user.uid, userPhotoURL, userNickName, userEmail);
@@ -89,9 +90,11 @@ export class AuthService {
 
   private updateUserDataByEmail(userUid: string, userPhotoURL: string, userNickName: string, userEmail: string) {
     console.log('updating user data...');
+    console.log(userPhotoURL);
     const userRef: AngularFirestoreDocument<User> = this.afs.doc('user/' + userUid);
     const data: User = {
-      uid: userUid,
+      type: 'player',
+      id: userUid,
       email: userEmail,
       clubs: [],
       nickName: userNickName,
