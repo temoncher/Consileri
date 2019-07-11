@@ -1,55 +1,63 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, Query } from '@angular/fire/firestore';
 import { SearchType } from '../models/search-type.enum';
 import { Observable } from 'rxjs';
+import { User } from '../models/user';
+import { Club } from '../models/club';
+import { ClubsService } from './clubs.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
 
+
   constructor(private afs: AngularFirestore) { }
 
-  searchData(title: string, type: SearchType) {
+  async searchData(title: string, type: SearchType) {
     // tslint:disable-next-line: prefer-const
-    let list: any[] = [];
-    if (type === SearchType.all) {
-      list = this.searchAll(title);
-      console.log(list);
-      return list;
-    } else {
-      const typeRef = this.afs.collection(type);
-      const snap = typeRef.ref;
-      snap.get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          list.push(doc.data());
-        });
-        switch (type) {
-          case 'club':
-            list = list.filter(item => item.name >= title);
-            break;
-          case 'game':
-            list = list.filter(item => item.Id >= title);
-            break;
-          case 'user':
-            list = list.filter(item => item.nickName >= title);
-            break;
-          default:
-            console.log('Unbelievable!');
-            break;
+    let result = [];
+    const fetched = await this.getData(type.toString());
+    switch (type.toString()) {
+      case 'all':
+        break;
+      case 'club':
+        fetched.forEach(club => {
+          if (club.name.toLowerCase().includes(title)) {
+            result.push(club);
           }
-        console.log(list);
-        return list;
-      });
+        });
+        break;
+      case 'game':
+        fetched.forEach(game => {
+          if (game.id.toLowerCase().includes(title)) {
+            result.push(game);
+          }
+        });
+        break;
+      case 'user':
+        fetched.forEach(user => {
+          if (user.nickName.toLowerCase().includes(title)) {
+            result.push(user);
+          }
+        });
+        break;
+      default:
+        console.log(type);
+        break;
     }
+    console.log('Filtered result: ' + result);
+    return result;
   }
 
-  private searchAll(title: string) {
+  async getData(type: string) {
     // tslint:disable-next-line: prefer-const
-    let list: any[] = [];
-    list = list.concat(this.searchData(title, SearchType.clubs));
-    list = list.concat(this.searchData(title, SearchType.game));
-    list = list.concat(this.searchData(title, SearchType.players));
-    return list;
+    let data = [];
+    await this.afs.collection(type).get().toPromise().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        data.push(doc.data());
+      });
+    });
+    return data;
   }
 }

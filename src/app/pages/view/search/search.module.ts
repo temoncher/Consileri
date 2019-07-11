@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: '',
     component: SearchPage
+  },
+  {
+    path: 'club/:clubId',
+    loadChildren: './club-detail/club-detail.module#ClubDetailPageModule'
   }
 ];
 
@@ -23,4 +27,4 @@ const routes: Routes = [
   ],
   declarations: [SearchPage]
 })
-export class SearchPageModule {}
+export class SearchPageModule { }

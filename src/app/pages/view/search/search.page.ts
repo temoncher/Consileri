@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchService } from 'src/app/core/search.service';
 import { SearchType } from 'src/app/models/search-type.enum';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -9,36 +10,30 @@ import { SearchType } from 'src/app/models/search-type.enum';
 })
 export class SearchPage implements OnInit {
 
-  results: any[];
+  results: any;
 
   searchTerm = '';
-  type: SearchType = SearchType.all;
+  type: SearchType = SearchType.clubs;
 
   constructor(private search: SearchService) { }
 
   ngOnInit() {
   }
 
-  searchChanged() {
-    this.results = this.search.searchData(this.searchTerm, this.type);
-    console.log(this.results);
+  async searchChanged() {
+    this.results = await this.search.searchData(this.searchTerm.toLowerCase(), this.type);
   }
 
-  typeAll() {
-    this.type = SearchType.all;
-    this.searchChanged();
-  }
   typeClub() {
     this.type = SearchType.clubs;
-    this.searchChanged();
-  }
-  typeGame() {
-    this.type = SearchType.game;
     this.searchChanged();
   }
   typePlayer() {
     this.type = SearchType.players;
     this.searchChanged();
   }
-
+  typeGame() {
+    this.type = SearchType.game;
+    this.searchChanged();
+  }
 }

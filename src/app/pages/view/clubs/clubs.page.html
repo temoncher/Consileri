@@ -1,27 +1,77 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Клубы</ion-title>
+    <ion-buttons *ngIf="!(user.clubs === [])" slot="primary">
+      <ion-button [routerLink]="['./create']">
+        <ion-icon name="add" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>  
-  <ion-row align-items-center style="height: 100%">
-    <ion-col>
-      <ion-row margin-vertical justify-content-center>
-          <h2>Попробуй</h2>  
+<ion-content>
+  <div *ngIf="user.clubs === []; then thenBlock else elseBlock"></div>
+  <ng-template #thenBlock>
+    <!--      
+      <ion-row align-items-center style="height: 100%">
+        <ion-col>
+          <ion-row margin-vertical justify-content-center>
+            <h2>Попробуй</h2>
+          </ion-row>
+          <ion-row justify-content-center>
+            <ion-button shape="round" [routerLink]="['./list']">Присоединиться</ion-button>
+          </ion-row>
+          <ion-row margin-vertical justify-content-center class="ion-text-center">
+            <ion-label>к существующему клубу<br><br>или</ion-label>
+          </ion-row>
+          <ion-row justify-content-center>
+            <ion-button shape="round" [routerLink]="['./create']">Создать</ion-button>
+          </ion-row>
+          <ion-row margin-vertical justify-content-center class="ion-text-center">
+            <ion-label>собственный!</ion-label>
+          </ion-row>
+        </ion-col>
       </ion-row>
-      <ion-row justify-content-center>
-          <ion-button shape="round" [routerLink]="['./list']">Присоединиться</ion-button>  
+    -->
+    <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-row margin-vertical>
+              <h2>Попробуй</h2>
+            </ion-row>
+            <ion-row>
+              <ion-button shape="round" [routerLink]="['/view/search']">Присоединиться</ion-button>
+            </ion-row>
+            <ion-row margin-vertical class="ion-text-center">
+              <ion-label>к существующему клубу<br><br>или</ion-label>
+            </ion-row>
+            <ion-row>
+              <ion-button shape="round" [routerLink]="['./create']">Создать</ion-button>
+            </ion-row>
+            <ion-row margin-vertical class="ion-text-center">
+              <ion-label>собственный!</ion-label>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+    </ion-grid>
+  </ng-template>
+  <ng-template #elseBlock>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-card *ngFor="let club of user.clubs" [routerLink]="['./', club.id]">
+            <ion-card-header>
+              <ion-card-subtitle>City</ion-card-subtitle>
+              <ion-card-title>{{ club.name }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <!--
+                <ion-img [src]="club.imageURL"></ion-img>
+                -->
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
       </ion-row>
-      <ion-row margin-vertical justify-content-center class="ion-text-center">
-          <ion-label>к существующему клубу<br><br>или</ion-label>  
-      </ion-row>
-      <ion-row justify-content-center>
-          <ion-button shape="round" [routerLink]="['./create']">Создать</ion-button>  
-      </ion-row>
-      <ion-row margin-vertical justify-content-center class="ion-text-center">
-          <ion-label>собственный!</ion-label>  
-      </ion-row>
-    </ion-col>
-  </ion-row>
+    </ion-grid>
+  </ng-template>
 </ion-content>

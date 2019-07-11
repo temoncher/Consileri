@@ -13,11 +13,10 @@ export class ProfilePage implements OnInit {
   user: User = new User();
 
   constructor(private auth: AuthService,
-              private router: Router) {
-    this.user = auth.getUserCustomData();
-    }
+              private router: Router) { }
 
   ngOnInit() {
+    this.user = this.auth.getUserCustomData();
   }
 
   logout() {

@@ -17,7 +17,7 @@ const routes: Routes = [
     path: '',
     children: [
       { path: 'create', loadChildren: './create/create.module#CreatePageModule' },
-      { path: 'list', loadChildren: './list/list.module#ListPageModule' }
+      { path: ':clubId', loadChildren: './club-detail/club-detail.module#ClubDetailPageModule'}
     ]
   }
 ];

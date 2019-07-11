@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import * as firebase from 'firebase/app';
@@ -6,7 +6,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { User } from '../models/user';
 
 
@@ -21,37 +21,29 @@ export class AuthService {
 
   constructor( private afAuth: AngularFireAuth,
                private afs: AngularFirestore,
-               private router: Router) {
+               private router: Router) { }
 
-  // Get auth datam then get firestore user document || null
-  console.log(this.afAuth.auth.currentUser);
-  if (this.afAuth.auth.currentUser) {
-    this.isLoggedIn = true;
-  }
+  checkLoggedIn(): void {
+    if (this.afAuth.auth.currentUser) {
+      console.log('Firebase auth online');
+      this.isLoggedIn = true;
+    } else {
+      console.log('Firebase auth offline');
+    }
 
-  this.getUser()
-  .then((user) => {
-      this.afs.collection('user').doc(user.uid)
-        .get().toPromise().then((documentSnapshot) => {
-            this.userCustom = documentSnapshot.data() as User;
-        });
-    });
-  /*
-  this.user = this.afAuth.authState
-    .pipe(
-      switchMap( user => {
+    this.getUser()
+    .then((user) => {
         if (user) {
-          console.log(user);
-          this.isLoggedIn = true;
-          return this.afs.doc<User>('user/' + user.uid).valueChanges();
+          this.afs.collection('user').doc(user.uid)
+            .get().pipe(map(value => {
+              this.userCustom = value.data() as User;
+              console.log('User custom data updated');
+            }))
+            .subscribe();
         } else {
-          console.log('user is null');
-          this.isLoggedIn = false;
-          return of(null);
+          console.log('User is logged out or missing');
         }
-      })
-    );
-    */
+      });
   }
 
   getUser() {
@@ -65,14 +57,14 @@ export class AuthService {
   emailLogin(userEmail: string, userPassword: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(userEmail, userPassword)
       .then(() => {
-        this.isLoggedIn = true;
+        this.checkLoggedIn();
         this.router.navigate(['/view/play']);
       });
   }
 
   logout() {
     return this.afAuth.auth.signOut()
-      .then(() => this.isLoggedIn = false);
+      .then(() => this.checkLoggedIn());
   }
 
   authenticated() {
@@ -93,7 +85,7 @@ export class AuthService {
     console.log(userPhotoURL);
     const userRef: AngularFirestoreDocument<User> = this.afs.doc('user/' + userUid);
     const data: User = {
-      type: 'player',
+      type: 'user',
       id: userUid,
       email: userEmail,
       clubs: [],
