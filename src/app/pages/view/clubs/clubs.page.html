@@ -9,30 +9,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content text-center>
   <div *ngIf="user.clubs === []; then thenBlock else elseBlock"></div>
   <ng-template #thenBlock>
-    <!--      
-      <ion-row align-items-center style="height: 100%">
-        <ion-col>
-          <ion-row margin-vertical justify-content-center>
-            <h2>Попробуй</h2>
-          </ion-row>
-          <ion-row justify-content-center>
-            <ion-button shape="round" [routerLink]="['./list']">Присоединиться</ion-button>
-          </ion-row>
-          <ion-row margin-vertical justify-content-center class="ion-text-center">
-            <ion-label>к существующему клубу<br><br>или</ion-label>
-          </ion-row>
-          <ion-row justify-content-center>
-            <ion-button shape="round" [routerLink]="['./create']">Создать</ion-button>
-          </ion-row>
-          <ion-row margin-vertical justify-content-center class="ion-text-center">
-            <ion-label>собственный!</ion-label>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-    -->
     <ion-grid>
         <ion-row>
           <ion-col>

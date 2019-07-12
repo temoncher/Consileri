@@ -18,7 +18,7 @@
     <ion-tab-button tab="profile">
       <ion-icon name="contact"></ion-icon>
       <ion-label>Профиль</ion-label>
-      <ion-badge>6</ion-badge>
+      <ion-badge *ngIf="user !== undefined">{{ user.notificationsCount }}</ion-badge>
     </ion-tab-button>
 
     <ion-tab-button tab="settings">

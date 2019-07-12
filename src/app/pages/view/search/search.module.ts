@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'club/:clubId',
-    loadChildren: './club-detail/club-detail.module#ClubDetailPageModule'
+    loadChildren: '../clubs/club-detail/club-detail.module#ClubDetailPageModule'
   }
 ];
 

@@ -5,42 +5,44 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-searchbar [(ngModel)]="searchTerm" (ionChange)="searchChanged($event)" debounce="1000" no-padding>
-    <ion-chip [ngSwitch]="type">
+  <ion-searchbar [(ngModel)]="searchTerm" (ionChange)="searchChanged($event)" debounce="1000" [placeholder]="searchbarText" [searchIcon]="searchbarIcon" no-padding></ion-searchbar>
+    <!--
+    <ion-chip [ngSwitch]="type" margin-end>
       <ion-icon *ngSwitchCase="'club'" name="contacts" no-margin></ion-icon>
       <ion-icon *ngSwitchCase="'user'" name="contact" no-margin></ion-icon>
       <ion-icon *ngSwitchCase="'game'" name="play" no-margin></ion-icon>
     </ion-chip>
   </ion-searchbar>
-  <ion-chip *ngIf="type !== 'club'" (click)="typeClub()">Клуб</ion-chip>
-  <ion-chip *ngIf="type !== 'user'" (click)="typePlayer()">Игрок</ion-chip>
-  <ion-chip *ngIf="type !== 'game'" (click)="typeGame()">Игра</ion-chip>
+  -->
+  <div>
+    <ion-chip *ngIf="type !== 'club'" (click)="typeClub()">Клуб</ion-chip>
+    <ion-chip *ngIf="type !== 'user'" (click)="typePlayer()">Игрок</ion-chip>
+    <ion-chip *ngIf="type !== 'game'" (click)="typeGame()">Игра</ion-chip>
+  </div>
 
   <ion-list>
     <div *ngFor="let item of results" [ngSwitch]="item.type">
-      <ion-item *ngSwitchCase="'club'" detail button [routerLink]="['club', item.id]"
+      <ion-item lines="none" *ngSwitchCase="'club'" detail button [routerLink]="['club', item.id]"
         routerLinkActive="router-link-active">
         <ion-avatar slot="start"></ion-avatar>
         <ion-label>
           <h3>{{ item.name }}</h3>
           Don: {{ item.creator }}
         </ion-label>
-        <ion-icon slot="end" name="contacts"></ion-icon>
       </ion-item>
 
-      <ion-item *ngSwitchCase="'user'" detail button [routerLink]="['/user', item.id]"
+      <ion-item lines="none" *ngSwitchCase="'user'" detail button [routerLink]="['/user', item.id]"
         routerLinkActive="router-link-active">
         <ion-avatar slot="start">
-          <!--<img [src]='item.photoURL'>-->
+          <img [src]='item.photoURL'>
         </ion-avatar>
         <ion-label>
           <h3>{{ item.nickName }}</h3>
           E-mail: {{ item.email }}
         </ion-label>
-        <ion-icon slot="end" name="contact"></ion-icon>
       </ion-item>
 
-      <ion-item *ngSwitchCase="'game'" detail button [routerLink]="['/game', item.id]"
+      <ion-item lines="none" *ngSwitchCase="'game'" detail button [routerLink]="['/game', item.id]"
         routerLinkActive="router-link-active">
         <ion-icon slot="start" name="play"></ion-icon>
         <ion-label>

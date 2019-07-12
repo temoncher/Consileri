@@ -4,3 +4,28 @@
 // styles are for the entire app and not just one component. Additionally, this 
 // file can hold Sass mixins, functions, and placeholder classes to be imported 
 // and used throughout the application.
+
+ion-input {
+    input{
+        margin-bottom: -15px;
+    }
+}
+
+.full-page{
+
+    text-align: center;
+    --overflow: hidden;
+
+    ion-grid{
+        height: 100vh;
+    }
+
+    ion-row{
+        height: 100vh;
+        align-content: center;
+    }
+    
+    ion-col{
+        align-items: stretch;
+    }
+}

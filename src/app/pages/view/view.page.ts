@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/core/auth.service';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-view',
@@ -7,9 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewPage implements OnInit {
 
-  constructor() { }
+  user: User = new User();
 
-  ngOnInit() {
+  constructor(private auth: AuthService) { }
+
+  async ngOnInit() {
+    await this.auth.checkLoggedIn;
+    this.user = this.auth.userCustom;
+    console.log(this.user);
   }
 
 }

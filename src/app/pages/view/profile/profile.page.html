@@ -4,26 +4,18 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>  
-  <ion-row class="ion-align-items-center ion-justify-content-center" style="height: 100%">
-    <ion-col>
-      <ion-row margin-vertical justify-content-center>
-        <ion-avatar>
-            <img [src]='user.photoURL'>
-        </ion-avatar>
-      </ion-row>
-      <ion-row margin-vertical justify-content-center>
-          <h2>{{ user.nickName }}</h2>  
-      </ion-row>
-      <ion-row margin-vertical justify-content-center>
-          <h2>{{ user.email }}</h2>  
-      </ion-row>
-      <ion-row class="ion-justify-content-center">
-          <ion-button shape="round" (click)="logout()">Выйти</ion-button>  
-      </ion-row>
-      <ion-row class="ion-justify-content-center">
-          <ion-button shape="round" color="danger">Удалить профиль</ion-button>  
-      </ion-row>
-    </ion-col>
-  </ion-row>
+<ion-content text-center>
+  <ion-img [src]='user.photoURL'></ion-img>
+  <ion-grid no-padding fixed>
+    <ion-row margin>
+      <ion-col size="8" offset="2">
+        <ion-label>
+          <h1>{{ user.nickName }}</h1>
+          <h2>{{ user.email }}</h2>
+        </ion-label>
+        <ion-button margin shape="round" (click)="logout()">Выйти</ion-button>
+        <ion-button shape="round" color="danger" (click)="presentAlert()">Удалить аккаунт</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
