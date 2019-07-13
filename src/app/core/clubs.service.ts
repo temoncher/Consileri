@@ -9,6 +9,7 @@ import { Observable, of } from 'rxjs';
 import { AuthService } from './auth.service';
 import { Club } from '../models/club';
 import { User } from '../models/user';
+import { LoadingController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class ClubsService {
 
   constructor( private auth: AuthService,
                private afs: AngularFirestore,
+               private loadCtrl: LoadingController,
                private router: Router) {
     this.InitializeService();
   }
@@ -36,6 +38,8 @@ export class ClubsService {
   }
 
   async createClub(clubName: string) {
+    const data: Club = new Club('', clubName, this.user.id, [this.user.id]);
+    /*
     const data: Club = {
       type: 'club',
       id: '',
@@ -44,18 +48,24 @@ export class ClubsService {
       creator: this.user.id,
       members: [this.user.id]
     };
+    */
     // tslint:disable-next-line: prefer-const
     let userClubs = this.user.clubs;
-    await this.afs.collection('club').add(data).then((docRef) => {
-      docRef.update({id: docRef.id});
-      userClubs.push({
-        name: clubName,
-        id: docRef.id
+    this.loadCtrl.create({
+      message: 'Создаем ваш новый клуб...',
+    }).then(async (loadingEl) => {
+      loadingEl.present();
+      await this.afs.collection('club').add(data as object).then((docRef) => {
+        docRef.update({id: docRef.id});
+        userClubs.push({
+          name: clubName,
+          id: docRef.id
+        });
       });
+      await this.afs.collection('user').doc(this.user.id).update({
+        clubs: userClubs
+      }).then(() => this.router.navigate(['./view/clubs']).then(() => loadingEl.dismiss()));
     });
-    await this.afs.collection('user').doc(this.user.id).update({
-      clubs: userClubs
-    }).then(() => this.router.navigate(['./view/clubs']));
   }
 
   joinClub(clubId: string) {

@@ -8,6 +8,8 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 import { User } from '../models/user';
+import { LoadingController } from '@ionic/angular';
+import { loadingController } from '@ionic/core';
 
 
 @Injectable({
@@ -21,6 +23,7 @@ export class AuthService {
 
   constructor( private afAuth: AngularFireAuth,
                private afs: AngularFirestore,
+               private loadCtrl: LoadingController,
                private router: Router) { }
 
   checkLoggedIn(): void {
@@ -55,11 +58,14 @@ export class AuthService {
   }
 
   emailLogin(userEmail: string, userPassword: string) {
-    return this.afAuth.auth.signInWithEmailAndPassword(userEmail, userPassword)
-      .then(() => {
-        this.checkLoggedIn();
-        this.router.navigate(['/view/play']);
-      });
+    this.loadCtrl.create({message: 'Выполняем вход...'}).then((loadingEl) => {
+      loadingEl.present();
+      return this.afAuth.auth.signInWithEmailAndPassword(userEmail, userPassword)
+        .then(() => {
+          this.checkLoggedIn();
+          this.router.navigate(['/view/play']).then(() => loadingEl.dismiss());
+        });
+    });
   }
 
   logout() {
@@ -73,17 +79,22 @@ export class AuthService {
 
   emailRegister(userPhotoURL: string, userNickName: string, userEmail: string, userPassword: string) {
     console.log(userPhotoURL);
-    return this.afAuth.auth.createUserWithEmailAndPassword(userEmail, userPassword)
-      .then((credential) => {
-        this.updateUserDataByEmail(credential.user.uid, userPhotoURL, userNickName, userEmail);
-        this.router.navigate(['/login']);
-      });
+    this.loadCtrl.create({message: 'Создаем ваш аккаунт...'}).then((loadingEl) => {
+      loadingEl.present();
+      return this.afAuth.auth.createUserWithEmailAndPassword(userEmail, userPassword)
+        .then((credential) => {
+          this.updateUserDataByEmail(credential.user.uid, userPhotoURL, userNickName, userEmail);
+          this.router.navigate(['/login']).then(() => loadingEl.dismiss());
+        });
+    });
   }
 
   private updateUserDataByEmail(userUid: string, userPhotoURL: string, userNickName: string, userEmail: string) {
     console.log('updating user data...');
     console.log(userPhotoURL);
     const userRef: AngularFirestoreDocument<User> = this.afs.doc('user/' + userUid);
+    const data: User = new User(userUid, userEmail, userNickName, userPhotoURL);
+    /*
     const data: User = {
       type: 'user',
       id: userUid,
@@ -92,6 +103,7 @@ export class AuthService {
       nickName: userNickName,
       photoURL: userPhotoURL
     };
+    */
     return userRef.set(data);
   }
 
