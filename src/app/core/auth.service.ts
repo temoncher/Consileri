@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
-import { Observable, of} from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { first, map, switchMap } from 'rxjs/operators';
 import { User } from '../models/user';
 import { LoadingController } from '@ionic/angular';
@@ -16,64 +16,30 @@ import { LoadingController } from '@ionic/angular';
 export class AuthService {
 
   user: Observable<User>;
-  userCustom: User;
   private isLoggedIn = false;
 
-  constructor( private afAuth: AngularFireAuth,
-               private afs: AngularFirestore,
-               private loadCtrl: LoadingController,
-               private router: Router) {
-    /*
+  constructor(private afAuth: AngularFireAuth,
+              private afs: AngularFirestore,
+              private loadCtrl: LoadingController,
+              private router: Router) {
     this.user = this.afAuth.authState.pipe(
       switchMap((user) => {
         if (user) {
-          return this.afs.collection('user').doc(user.uid).valueChanges();
+          return this.afs.collection('user').doc<User>(user.uid).valueChanges();
         } else {
           console.log('User is logged out or missing');
           return of(null);
         }
       })
     );
-    */
   }
 
-  private checkLoggedIn(): void {
-    if (this.afAuth.auth.currentUser) {
-      console.log('Firebase auth online');
-      this.isLoggedIn = true;
-    } else {
-      console.log('Firebase auth offline');
-    }
-
-    this.getUser()
-    .then((user) => {
-        if (user) {
-          this.afs.collection('user').doc(user.uid)
-            .get().pipe(map(value => {
-              this.userCustom = value.data() as User;
-              console.log('User custom data updated');
-            }))
-            .subscribe();
-        } else {
-          console.log('User is logged out or missing');
-        }
-      });
-  }
-
-  getUser() {
-    return this.afAuth.authState.pipe(first()).toPromise();
-  }
-
-  getUserCustomData() {
-    return this.userCustom;
-  }
-
-  emailLogin(userEmail: string, userPassword: string) {
-    this.loadCtrl.create({message: 'Выполняем вход...'}).then((loadingEl) => {
+  emailLogin(credentials) {
+    this.loadCtrl.create({ message: 'Выполняем вход...' }).then((loadingEl) => {
       loadingEl.present();
-      return this.afAuth.auth.signInWithEmailAndPassword(userEmail, userPassword)
+      return this.afAuth.auth.signInWithEmailAndPassword(credentials.email, credentials.password)
         .then(() => {
-          this.checkLoggedIn();
+          this.isLoggedIn = true;
           this.router.navigate(['/view/play']).then(() => loadingEl.dismiss());
         });
     });
@@ -81,20 +47,20 @@ export class AuthService {
 
   logout() {
     return this.afAuth.auth.signOut()
-      .then(() => this.checkLoggedIn());
+      .then(() => this.isLoggedIn = false);
   }
 
   authenticated() {
     return this.isLoggedIn;
   }
 
-  emailRegister(userPhotoURL: string, userNickName: string, userEmail: string, userPassword: string) {
-    console.log(userPhotoURL);
-    this.loadCtrl.create({message: 'Создаем ваш аккаунт...'}).then((loadingEl) => {
+  emailRegister(credentials) {
+    console.log(credentials.imageURL);
+    this.loadCtrl.create({ message: 'Создаем ваш аккаунт...' }).then((loadingEl) => {
       loadingEl.present();
-      return this.afAuth.auth.createUserWithEmailAndPassword(userEmail, userPassword)
+      return this.afAuth.auth.createUserWithEmailAndPassword(credentials.email, credentials.password)
         .then((credential) => {
-          this.updateUserDataByEmail(credential.user.uid, userPhotoURL, userNickName, userEmail);
+          this.updateUserDataByEmail(credential.user.uid, credentials.imageURL, credentials.nickName, credentials.email.toLowerCase());
           this.router.navigate(['/login']).then(() => loadingEl.dismiss());
         });
     });
@@ -115,6 +81,11 @@ export class AuthService {
       notificationCount: 0
     };
     return userRef.set(data);
+  }
+
+  deleteAccount() {
+    this.afs.doc('user/' + this.afAuth.auth.currentUser.uid).delete();
+    this.afAuth.auth.currentUser.delete().then(() => this.router.navigate(['/login']));
   }
 
   // oAuth login system

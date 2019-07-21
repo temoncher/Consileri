@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content text-center>
+<ion-content *ngIf="user" text-center>
   <ion-img [src]='user.photoURL'></ion-img>
   <ion-grid no-padding fixed>
     <ion-row margin>

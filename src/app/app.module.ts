@@ -17,6 +17,7 @@ import { AngularFireModule } from '@angular/fire';
 import firebaseConfig from './firebaseConfig';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,7 +29,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
     CoreModule,
     AppRoutingModule,
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    ReactiveFormsModule
   ],
   providers: [
     StatusBar,

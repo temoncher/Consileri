@@ -5,16 +5,25 @@
         <ion-label margin>
           <h1>Консильери</h1>
         </ion-label>
-        <form #form="ngForm" (ngSubmit)="login(form)">
+        <form [formGroup]="loginForm" novalidate>
+
           <ion-item>
-            <ion-input name="email" type="email" placeholder="Почта" [(ngModel)]="Email" required></ion-input>
+            <ion-label position="stacked">
+              Ваша почта:
+            </ion-label>
+            <ion-input type="email" formControlName="email" placeholder="email@provider.domain"></ion-input>
           </ion-item>
+
           <ion-item>
-            <ion-input name="password" type="password" placeholder="Пароль" [(ngModel)]="Password" required>
-            </ion-input>
+            <ion-label position="stacked">
+              Ваша пароль:
+            </ion-label>
+            <ion-input type="password" formControlName="password" placeholder="Str0ngestPa22w0rd"></ion-input>
           </ion-item>
-          <ion-button margin type="submit" shape="round">Войти</ion-button>
-          <!--[disabled]="form.invalid"-->
+
+          <ion-button margin type="submit" shape="round" [disabled]="loginForm.invalid" (click)="onSubmit()">
+            Войти
+          </ion-button>
         </form>
         <ion-label>
           <p>Еще нет аккаунта?</p>

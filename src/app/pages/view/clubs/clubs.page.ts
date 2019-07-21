@@ -11,17 +11,19 @@ import { User } from 'src/app/models/user';
 })
 export class ClubsPage implements OnInit {
 
-  clubs: Club[] = [];
+  user: User;
+  clubs: Promise<Club[]>;
 
   constructor( private clubsService: ClubsService,
                private auth: AuthService) { }
 
   ngOnInit() {
     console.log('clubs page ngOnInit');
+    this.auth.user.subscribe(user => this.user = user);
   }
 
   ionViewWillEnter() {
     console.log('clubs page ionViewWillEnter');
-    this.clubsService.getClubsByUserId(this.auth.userCustom.id);
+    this.clubs = this.clubsService.getClubsByUserId(this.user.id);
   }
 }

@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
@@ -12,19 +12,18 @@ import { User } from '../models/user';
 @Injectable({
   providedIn: 'root'
 })
-export class ClubsService {
+export class ClubsService implements OnInit {
 
   private user: User;
 
   constructor( private auth: AuthService,
                private afs: AngularFirestore,
                private loadCtrl: LoadingController,
-               private router: Router) {
-    this.InitializeService();
-  }
+               private router: Router) { }
 
-  InitializeService() {
-    this.user = this.auth.getUserCustomData();
+  ngOnInit() {
+    // this.user = this.auth.getUserCustomData();
+    this.auth.user.subscribe(user => this.user = user);
   }
 
   async getClub(clubId: string) {
@@ -35,7 +34,7 @@ export class ClubsService {
     return foundClub;
   }
 
-  getClubsByUserId(userId: string): Promise<Club[]> {
+  getClubsByUserId(userId: string) {
     console.log('getClubsByUserId started');
     return new Promise<Club[]> (async (resolve, reject) => {
       // tslint:disable-next-line: prefer-const

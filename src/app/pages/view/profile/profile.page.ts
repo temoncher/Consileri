@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/core/auth.service';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { AlertController } from '@ionic/angular';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -11,14 +12,16 @@ import { AlertController } from '@ionic/angular';
 })
 export class ProfilePage implements OnInit {
 
-  user: User = new User();
+  // user: Observable<User>;
+  user: User;
 
   constructor(private auth: AuthService,
               private alert: AlertController,
               private router: Router) { }
 
   ngOnInit() {
-    this.user = this.auth.getUserCustomData();
+    // this.user = this.auth.user;
+    this.auth.user.subscribe(user => this.user = user);
   }
 
   logout() {
@@ -34,15 +37,12 @@ export class ProfilePage implements OnInit {
         text: 'Удалить',
         role: 'destructive',
         handler: () => {
-          console.log('confirmed');
+          this.auth.deleteAccount();
         }
       },
       {
         text: 'Отмена',
-        role: 'cancel',
-        handler: () => {
-          console.log('canceled');
-        }
+        role: 'cancel'
       }]
     });
 

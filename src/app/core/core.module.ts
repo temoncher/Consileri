@@ -10,7 +10,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
   imports: [
     CommonModule,
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule.enablePersistence()
   ]
 })
 export class CoreModule { }

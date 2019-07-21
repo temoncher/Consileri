@@ -1,4 +1,4 @@
-<ion-tabs>
+<ion-tabs *ngIf="auth.user | async as user">
   <ion-tab-bar slot="home">
     <ion-tab-button tab="search">
       <ion-icon name="search"></ion-icon>
@@ -18,7 +18,7 @@
     <ion-tab-button tab="profile">
       <ion-icon name="contact"></ion-icon>
       <ion-label>Профиль</ion-label>
-      <!--<ion-badge>{{ user.notificationCount }}</ion-badge>-->
+      <ion-badge *ngIf="user.notificationCount > 0">{{ user.notificationCount }}</ion-badge>
     </ion-tab-button>
 
     <ion-tab-button tab="settings">
