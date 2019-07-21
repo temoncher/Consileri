@@ -3,6 +3,8 @@ import { ClubsService } from 'src/app/core/clubs.service';
 import { NavController } from '@ionic/angular';
 import { Club } from 'src/app/models/club';
 import { ActivatedRoute } from '@angular/router';
+import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/core/auth.service';
 
 @Component({
   selector: 'app-club-detail',
@@ -15,6 +17,7 @@ export class ClubDetailPage implements OnInit {
 
   constructor(private clubService: ClubsService,
               private navController: NavController,
+              private auth: AuthService,
               private activatedRoute: ActivatedRoute) { }
 
   async ngOnInit() {
@@ -31,8 +34,7 @@ export class ClubDetailPage implements OnInit {
   }
 
   joinClub() {
-    // this.clubService.joinClub();
-    this.navController.navigateBack('/view/clubs');
+    this.clubService.joinClub(this.club.id);
   }
 
 }

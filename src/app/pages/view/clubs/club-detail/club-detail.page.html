@@ -7,6 +7,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-button (click)="joinClub()">Join</ion-button>
-</ion-content>
+<ion-content text-center>
+    <!--<ion-img [src]='club.photoURL'></ion-img>-->
+    <ion-grid no-padding fixed>
+      <ion-row margin>
+        <ion-col size="8" offset="2">
+          <ion-label>
+            <h1>{{ club.name }}</h1>
+            <h2>{{ club.creator }}</h2>
+          </ion-label>
+          <ion-button shape="round" (click)="joinClub()">Join</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>

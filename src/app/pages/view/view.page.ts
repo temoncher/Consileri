@@ -13,8 +13,8 @@ export class ViewPage implements OnInit {
 
   constructor(private auth: AuthService) { }
 
-  async ngOnInit() {
-    await this.auth.checkLoggedIn;
+  ngOnInit() {
+    // await this.auth.checkLoggedIn;
     this.user = this.auth.userCustom;
     console.log(this.user);
   }

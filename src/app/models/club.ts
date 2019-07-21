@@ -5,6 +5,7 @@ export class Club {
     rating: number;
     creator: string;
     members: any;
+    // creationDate: any;
 
     constructor(id?: string, name?: string, creator?: string, members?: any) {
         this.id = id;

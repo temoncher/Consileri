@@ -1,15 +1,13 @@
-import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { LoadingController } from '@ionic/angular';
 
-import * as firebase from 'firebase/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-
-import { Observable, of } from 'rxjs';
+import * as firebase from 'firebase/app';
 
 import { AuthService } from './auth.service';
 import { Club } from '../models/club';
 import { User } from '../models/user';
-import { LoadingController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +23,7 @@ export class ClubsService {
     this.InitializeService();
   }
 
-  InitializeService(): void {
+  InitializeService() {
     this.user = this.auth.getUserCustomData();
   }
 
@@ -37,9 +35,26 @@ export class ClubsService {
     return foundClub;
   }
 
+  getClubsByUserId(userId: string): Promise<Club[]> {
+    console.log('getClubsByUserId started');
+    return new Promise<Club[]> (async (resolve, reject) => {
+      // tslint:disable-next-line: prefer-const
+      let queriedClubs = [];
+      await this.afs.collection('club').ref.where('members', 'array-contains', userId).get()
+        .then((querySnapshot) => {
+          console.log('querySnapshot aquired');
+          querySnapshot.forEach((docSnapshot) => {
+            queriedClubs.push(docSnapshot.data);
+          });
+        });
+      console.log('resolving');
+      resolve(queriedClubs);
+      reject('Error occured');
+    });
+  }
+
   async createClub(clubName: string) {
-    const data: Club = new Club('', clubName, this.user.id, [this.user.id]);
-    /*
+    // const data: Club = new Club('', clubName, this.user.id, [this.user.id]);
     const data: Club = {
       type: 'club',
       id: '',
@@ -48,35 +63,33 @@ export class ClubsService {
       creator: this.user.id,
       members: [this.user.id]
     };
-    */
-    // tslint:disable-next-line: prefer-const
-    let userClubs = this.user.clubs;
+    let clubId = '';
     this.loadCtrl.create({
       message: 'Создаем ваш новый клуб...',
     }).then(async (loadingEl) => {
       loadingEl.present();
-      await this.afs.collection('club').add(data as object).then((docRef) => {
+      await this.afs.collection('club').add(data).then((docRef) => {
         docRef.update({id: docRef.id});
-        userClubs.push({
-          name: clubName,
-          id: docRef.id
-        });
+        clubId = docRef.id;
       });
       await this.afs.collection('user').doc(this.user.id).update({
-        clubs: userClubs
+        clubs: firebase.firestore.FieldValue.arrayUnion(clubId)
       }).then(() => this.router.navigate(['./view/clubs']).then(() => loadingEl.dismiss()));
     });
   }
 
   joinClub(clubId: string) {
+    console.log('Entering joinClub');
     const clubRef: AngularFirestoreDocument<Club> = this.afs.collection('club').doc(clubId);
     clubRef.update({
       members: firebase.firestore.FieldValue.arrayUnion(this.user.id)
     });
+    console.log('Club member added to club card');
     const userRef: AngularFirestoreDocument<User> = this.afs.collection('user').doc(this.user.id);
     userRef.update({
       clubs: firebase.firestore.FieldValue.arrayUnion(clubId)
     });
+    console.log('Club added to user clubs');
     this.router.navigate(['./view/clubs']);
   }
 

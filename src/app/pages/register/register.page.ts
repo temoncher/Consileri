@@ -8,11 +8,10 @@ import { AuthService } from '../../core/auth.service';
 })
 export class RegisterPage implements OnInit {
 
-  Email: '';
-  Password: '';
-  NickName: '';
-// tslint:disable-next-line: max-line-length
-  imageURL;
+  Email = '';
+  Password = '';
+  NickName = '';
+  imageURL = '';
 
   constructor( public auth: AuthService) { }
 

@@ -1,15 +1,13 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import * as firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
-import { Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { Observable, of} from 'rxjs';
+import { first, map, switchMap } from 'rxjs/operators';
 import { User } from '../models/user';
 import { LoadingController } from '@ionic/angular';
-import { loadingController } from '@ionic/core';
 
 
 @Injectable({
@@ -24,9 +22,22 @@ export class AuthService {
   constructor( private afAuth: AngularFireAuth,
                private afs: AngularFirestore,
                private loadCtrl: LoadingController,
-               private router: Router) { }
+               private router: Router) {
+    /*
+    this.user = this.afAuth.authState.pipe(
+      switchMap((user) => {
+        if (user) {
+          return this.afs.collection('user').doc(user.uid).valueChanges();
+        } else {
+          console.log('User is logged out or missing');
+          return of(null);
+        }
+      })
+    );
+    */
+  }
 
-  checkLoggedIn(): void {
+  private checkLoggedIn(): void {
     if (this.afAuth.auth.currentUser) {
       console.log('Firebase auth online');
       this.isLoggedIn = true;
@@ -93,17 +104,16 @@ export class AuthService {
     console.log('updating user data...');
     console.log(userPhotoURL);
     const userRef: AngularFirestoreDocument<User> = this.afs.doc('user/' + userUid);
-    const data: User = new User(userUid, userEmail, userNickName, userPhotoURL);
-    /*
+    // const data: User = new User(userUid, userEmail, userNickName, userPhotoURL);
     const data: User = {
       type: 'user',
       id: userUid,
       email: userEmail,
       clubs: [],
       nickName: userNickName,
-      photoURL: userPhotoURL
+      photoURL: userPhotoURL,
+      notificationCount: 0
     };
-    */
     return userRef.set(data);
   }
 

@@ -11,19 +11,17 @@ import { User } from 'src/app/models/user';
 })
 export class ClubsPage implements OnInit {
 
-  user: User = new User();
+  clubs: Club[] = [];
 
   constructor( private clubsService: ClubsService,
                private auth: AuthService) { }
 
   ngOnInit() {
-    this.ionViewWillEnter();
+    console.log('clubs page ngOnInit');
   }
 
   ionViewWillEnter() {
-    this.user = this.auth.getUserCustomData();
-    console.log(this.user);
-    console.log(this.user.clubs);
-    console.log(!(this.user.clubs === []));
+    console.log('clubs page ionViewWillEnter');
+    this.clubsService.getClubsByUserId(this.auth.userCustom.id);
   }
 }
