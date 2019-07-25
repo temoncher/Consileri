@@ -32,6 +32,18 @@ export class AuthService {
         }
       })
     );
+
+    /*
+    this.afAuth.authState.pipe(
+      map((user) => {
+        if (user) {
+          this.afs.collection('user').doc<User>(user.uid).valueChanges().subscribe(userCustom => this.user = userCustom);
+        } else {
+          console.log('User is logged out or missing');
+        }
+      })
+    );
+    */
   }
 
   emailLogin(credentials) {

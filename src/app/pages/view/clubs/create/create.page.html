@@ -1,32 +1,44 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
+      <ion-back-button defaultHref="/view/clubs"></ion-back-button>
     </ion-buttons>
     <ion-title>Создать</ion-title>
   </ion-toolbar>
 </ion-header>
 
 
-<ion-content> 
-  <ion-row align-items-center style="height: 100%">
-    <ion-col>
-      <ion-row margin-vertical justify-content-center>
-          <h2>Назови свой клуб!</h2>  
-      </ion-row>
-      <form #form="ngForm" (ngSubmit)="createClub()">
-        <ion-row justify-content-center>
-            <div padding>
-              <ion-item>
-                <ion-input name="name" type="text" placeholder="Название" [(ngModel)]="Name" required></ion-input>
-              </ion-item>
-            </div>
-        </ion-row>
-        <ion-row margin-vertical justify-content-center class="ion-text-center">
-            <ion-button type="submit" shape="round">Создать</ion-button> <!--[disabled]="form.invalid"-->
-        </ion-row>
-      </form>
-    </ion-col>
-  </ion-row>
-</ion-content>
+<ion-content class="full-page">
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="8" offset="2">
 
+        <ion-label margin>
+          <h1>Как назовём?</h1>
+        </ion-label>
+
+        <form [formGroup]="clubForm" (ngSubmit)="createClub()" novalidate>
+
+          <ion-item>
+            <ion-label *ngIf="name.value == ''" position="stacked">
+              Название вашего клуба:
+            </ion-label>
+            <ion-label *ngIf="name.invalid && name.dirty && name.value != ''" position="stacked" color="danger">
+              Название уже занято.
+            </ion-label>
+            <ion-label *ngIf="name.pending" position="stacked" color="warning">
+              Проверяем...
+            </ion-label>
+            <ion-label *ngIf="name.valid" position="stacked" color="success">
+              Название свободно!
+            </ion-label>
+            <ion-input type="text" placeholder="МафКлуб" formControlName="name"></ion-input>
+          </ion-item>
+
+          <ion-button margin type="submit" shape="round" [disabled]="clubForm.invalid">Создать</ion-button>
+
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

@@ -1,22 +1,28 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button defaultHref="/view/clubs"></ion-back-button>
-    </ion-buttons>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/view/clubs"></ion-back-button>
+      </ion-buttons>
     <ion-title>{{ club.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="isCreator" [routerLink]="['./edit']">
+        <ion-icon name="create"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content text-center>
-    <!--<ion-img [src]='club.photoURL'></ion-img>-->
+<ion-content *ngIf="club" text-center>
+    <ion-img [src]='club.imgURL'></ion-img>
     <ion-grid no-padding fixed>
       <ion-row margin>
         <ion-col size="8" offset="2">
-          <ion-label>
+          <ion-label *ngIf="club.creator">
             <h1>{{ club.name }}</h1>
-            <h2>{{ club.creator }}</h2>
+            <h2>Дон {{ club.creator.nickName }}</h2>
           </ion-label>
-          <ion-button shape="round" (click)="joinClub()">Join</ion-button>
+          <ion-button margin *ngIf="!isMember" shape="round" (click)="joinClub()">Присоединиться</ion-button>
+          <ion-button margin *ngIf="isMember" shape="round" (click)="leaveClub()" color="danger">Покинуть клуб</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

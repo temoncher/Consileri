@@ -2,10 +2,12 @@
   <ion-grid fixed>
     <ion-row>
       <ion-col size="8" offset="2">
+
         <ion-label margin>
           <h1>Новенький?</h1>
         </ion-label>
-        <form [formGroup]="registerForm" novalidate>
+
+        <form [formGroup]="registerForm" (ngSubmit)="register()" novalidate>
 
           <ion-item>
             <ion-label *ngIf="nickName.value == ''" position="stacked">
@@ -47,8 +49,7 @@
             <ion-input type="password" placeholder="Str0ngestPa22w0rd" formControlName="password"></ion-input>
           </ion-item>
 
-          <ion-button margin type="submit" shape="round" [disabled]="registerForm.invalid || registerForm.pending"
-            (click)="register()">
+          <ion-button margin type="submit" shape="round" [disabled]="registerForm.invalid || registerForm.pending">
             Создать аккаунт
           </ion-button>
         </form>

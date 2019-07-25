@@ -18,6 +18,7 @@ export class FirebaseNicknameUniqueValidator {
     };
   }
 }
+
 export class FirebaseEmailUniqueValidator {
   static email(afs: AngularFirestore) {
     return (control: AbstractControl) => {

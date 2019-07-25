@@ -5,7 +5,7 @@
         <ion-label margin>
           <h1>Консильери</h1>
         </ion-label>
-        <form [formGroup]="loginForm" novalidate>
+        <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
 
           <ion-item>
             <ion-label position="stacked">
@@ -21,7 +21,7 @@
             <ion-input type="password" formControlName="password" placeholder="Str0ngestPa22w0rd"></ion-input>
           </ion-item>
 
-          <ion-button margin type="submit" shape="round" [disabled]="loginForm.invalid" (click)="onSubmit()">
+          <ion-button margin type="submit" shape="round" [disabled]="loginForm.invalid">
             Войти
           </ion-button>
         </form>

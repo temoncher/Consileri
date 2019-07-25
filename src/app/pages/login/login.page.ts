@@ -25,7 +25,7 @@ export class LoginPage implements OnInit {
     });
   }
 
-  onSubmit() {
+  login() {
     this.auth.emailLogin(this.loginForm.value);
   }
 

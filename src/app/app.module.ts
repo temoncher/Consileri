@@ -14,7 +14,7 @@ import { CoreModule } from './core/core.module';
 
 // Firebase App (the core Firebase SDK) is always required and must be listed first
 import { AngularFireModule } from '@angular/fire';
-import firebaseConfig from './firebaseConfig';
+import { environment } from '../environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -25,7 +25,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     CoreModule,
     AppRoutingModule,
     AngularFireAuthModule,
