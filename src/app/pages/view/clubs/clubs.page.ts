@@ -17,11 +17,6 @@ export class ClubsPage implements OnInit {
                private auth: AuthService) { }
 
   ngOnInit() {
-    console.log('NgOninit clubspage');
-    this.auth.user.subscribe(user =>{ this.user = user; console.log(this.user)});
-  }
-
-  ionViewWillEnter() {
-    // this.clubs = this.clubsService.getClubsByUserId(this.user.id);
+    this.auth.user.subscribe(user => this.user = user);
   }
 }

@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { LoadingController } from '@ionic/angular';
 
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
@@ -53,7 +53,10 @@ export class ClubsService {
           photoURL: this.user.photoURL
         }
       ],
-      imgURL: clubInfo.imgURL
+      imgURL: clubInfo.imgURL,
+      options: {
+        isPublic: false
+      }
     };
     let clubId = '';
     this.loadCtrl.create({
@@ -70,21 +73,23 @@ export class ClubsService {
             {
               id: clubId,
               name: clubInfo.name,
-              imgURL: clubInfo.imgURL
+              imgURL: clubInfo.imgURL,
+              clubNickName: this.user.nickName
             })
       }).then(() => this.router.navigate(['./view/clubs']).then(() => loadingEl.dismiss()));
     });
   }
 
-  async joinClub(clubId: string) {
+  async joinClub(clubId: string, chosenNickName: string) {
     let foundClub;
     const clubRef: AngularFirestoreDocument<Club> = this.afs.collection('club').doc(clubId);
     clubRef.update({
       members: firebase.firestore.FieldValue.arrayUnion(
         {
           id: this.user.id,
-          nickName: this.user.nickName,
-          photoURL: this.user.photoURL
+          nickName: chosenNickName,
+          photoURL: this.user.photoURL,
+          isConsileri: false
         })
     });
     await clubRef.get().toPromise().then((documentSnapshot) => {
@@ -96,37 +101,37 @@ export class ClubsService {
         {
           id: clubId,
           name: foundClub.name,
-          imgURL: foundClub.imgURL
+          imgURL: foundClub.imgURL,
+          clubNickName: chosenNickName
         })
     });
     this.router.navigate(['./view/clubs']);
   }
 
   async leaveClub(clubId: string) {
-    let foundClub;
+    const userClubInfo = (this.user.clubs as Array<any>).find(club => club.id === clubId);
+    console.log(userClubInfo);
     const clubRef: AngularFirestoreDocument<Club> = this.afs.collection('club').doc(clubId);
     clubRef.update({
       members: firebase.firestore.FieldValue.arrayRemove(
         {
           id: this.user.id,
-          nickName: this.user.nickName,
+          nickName: userClubInfo.clubNickName,
           photoURL: this.user.photoURL
         })
-    });
-    await clubRef.get().toPromise().then((documentSnapshot) => {
-      foundClub = documentSnapshot.data();
     });
     const userRef: AngularFirestoreDocument<User> = this.afs.collection('user').doc(this.user.id);
     userRef.update({
       clubs: firebase.firestore.FieldValue.arrayRemove(
         {
           id: clubId,
-          name: foundClub.name,
-          imgURL: foundClub.imgURL
+          name: userClubInfo.name,
+          imgURL: userClubInfo.imgURL,
+          clubNickName: userClubInfo.clubNickName
         })
     });
   }
-
+  /*
   getAllClubs() {
     // tslint:disable-next-line: prefer-const
     let allClubs = [];
@@ -138,4 +143,5 @@ export class ClubsService {
     console.log(allClubs);
     return allClubs;
   }
+  */
 }

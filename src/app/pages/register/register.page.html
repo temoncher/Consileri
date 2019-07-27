@@ -11,24 +11,14 @@
 
           <ion-item>
             <ion-label *ngIf="nickName.value == ''" position="stacked">
-              Ваш псевдоним:
-            </ion-label>
-            <ion-label *ngIf="nickName.invalid && nickName.dirty && nickName.value != ''" position="stacked"
-              color="danger">
-              Псевдоним уже занят.
-            </ion-label>
-            <ion-label *ngIf="nickName.pending" position="stacked" color="warning">
-              Проверяем...
-            </ion-label>
-            <ion-label *ngIf="nickName.valid" position="stacked" color="success">
-              Псевдоним свободен!
+              Выберите псевдоним:
             </ion-label>
             <ion-input type="text" placeholder="Консильери" formControlName="nickName"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label *ngIf="email.value == ''" position="stacked">
-              Ваша почта:
+              Введите почту:
             </ion-label>
             <ion-label *ngIf="email.invalid && email.dirty && email.value != ''" position="stacked" color="danger">
               Почта уже зарегистрирована.
@@ -39,14 +29,14 @@
             <ion-label *ngIf="email.valid" position="stacked" color="success">
               Почта свободна!
             </ion-label>
-            <ion-input type="email" placeholder="email@provider.domain" formControlName="email"></ion-input>
+            <ion-input type="email" placeholder="Почта" formControlName="email"></ion-input>
           </ion-item>
 
           <ion-item>
             <ion-label position="stacked">
-              Ваш пароль:
+              Придумайте пароль:
             </ion-label>
-            <ion-input type="password" placeholder="Str0ngestPa22w0rd" formControlName="password"></ion-input>
+            <ion-input type="password" placeholder="Пароль" formControlName="password"></ion-input>
           </ion-item>
 
           <ion-button margin type="submit" shape="round" [disabled]="registerForm.invalid || registerForm.pending">

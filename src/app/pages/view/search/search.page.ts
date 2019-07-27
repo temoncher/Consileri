@@ -30,18 +30,24 @@ export class SearchPage implements OnInit {
     this.type = SearchType.clubs;
     this.searchbarIcon = 'contacts';
     this.searchbarText = 'Поиск по клубам';
-    this.searchChanged();
+    if (this.searchTerm !== '') {
+      this.searchChanged();
+    }
   }
   typePlayer() {
     this.type = SearchType.players;
     this.searchbarIcon = 'contact';
     this.searchbarText = 'Поиск по игрокам';
-    this.searchChanged();
+    if (this.searchTerm !== '') {
+      this.searchChanged();
+    }
   }
   typeGame() {
     this.type = SearchType.game;
     this.searchbarIcon = 'play';
     this.searchbarText = 'Поиск по играм';
-    this.searchChanged();
+    if (this.searchTerm !== '') {
+      this.searchChanged();
+    }
   }
 }

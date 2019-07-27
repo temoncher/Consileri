@@ -1,10 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, Query } from '@angular/fire/firestore';
 import { SearchType } from '../models/search-type.enum';
-import { Observable } from 'rxjs';
-import { User } from '../models/user';
-import { Club } from '../models/club';
-import { ClubsService } from './clubs.service';
 
 @Injectable({
   providedIn: 'root'
@@ -43,10 +39,8 @@ export class SearchService {
         });
         break;
       default:
-        console.log(type);
         break;
     }
-    console.log('Filtered result: ' + result);
     return result;
   }
 

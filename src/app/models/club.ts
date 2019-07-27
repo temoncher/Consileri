@@ -10,6 +10,9 @@ export class Club {
     };
     members: any;
     imgURL: string;
+    options: {
+        isPublic: boolean
+    };
     // creationDate: any;
 
     constructor(id?: string, name?: string, creator?: any, members?: any, imgURL?: string) {
@@ -19,5 +22,8 @@ export class Club {
         this.members = members;
         this.imgURL = imgURL;
         this.rating = 0;
+        this.options = {
+            isPublic: false
+        };
     }
 }

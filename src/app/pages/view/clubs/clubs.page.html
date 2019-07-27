@@ -10,13 +10,13 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="full-page">
-  <ion-grid fixed>
-    <ion-row>
-      <ion-col>
-        <!--<div *ngIf="(clubs | async)&&(clubs.length === 0); then thenBlock else elseBlock"></div>-->
-        <div *ngIf="(user)&&(user.clubs.length === 0); then thenBlock else elseBlock"></div>
-        <ng-template #thenBlock>
+<div *ngIf="(user)&&(user.clubs.length === 0); then thenBlock else elseBlock"></div>
+
+<ng-template #thenBlock>
+  <ion-content class="full-page">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col>
           <h2>Попробуй</h2>
           <ion-button margin shape="round" [routerLink]="['/view/search']">Присоединиться</ion-button>
           <br />
@@ -29,12 +29,22 @@
           <ion-button margin shape="round" [routerLink]="['./create']">Создать</ion-button>
           <br />
           <ion-label>собственный!</ion-label>
-        </ng-template>
-        <ng-template #elseBlock>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</ng-template>
+
+<ng-template #elseBlock>
+  <ion-content>
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col>
           <div *ngIf="user">
             <ion-card *ngFor="let club of user.clubs" [routerLink]="['./', club.id]">
               <ion-card-header>
-                <ion-card-subtitle>City</ion-card-subtitle>
+                <ion-card-subtitle *ngIf="user.nickName !== club.clubNickName">Как {{ club.clubNickName }} в
+                </ion-card-subtitle>
                 <ion-card-title>{{ club.name }}</ion-card-title>
               </ion-card-header>
               <ion-card-content>
@@ -44,8 +54,8 @@
               </ion-card-content>
             </ion-card>
           </div>
-        </ng-template>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</ng-template>

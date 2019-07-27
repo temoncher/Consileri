@@ -1,10 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { ClubsService } from 'src/app/core/clubs.service';
-import { NavController } from '@ionic/angular';
-import { Club } from 'src/app/models/club';
 import { ActivatedRoute } from '@angular/router';
-import { User } from 'src/app/models/user';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { NavController } from '@ionic/angular';
+
+import { ClubsService } from 'src/app/core/clubs.service';
 import { AuthService } from 'src/app/core/auth.service';
+
+import { Club } from 'src/app/models/club';
+import { User } from 'src/app/models/user';
+
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FirebaseUniqueMemberValidator } from 'src/app/models/validators/firebase-unique-member-validator';
 
 @Component({
   selector: 'app-club-detail',
@@ -13,15 +19,19 @@ import { AuthService } from 'src/app/core/auth.service';
 })
 export class ClubDetailPage implements OnInit {
 
+  joinForm: FormGroup;
   club: Club = new Club();
   user: User;
   isMember = false;
   isCreator = false;
+  overlayHidden = true;
 
   constructor(private clubService: ClubsService,
               private navController: NavController,
               private auth: AuthService,
-              private activatedRoute: ActivatedRoute) { }
+              private activatedRoute: ActivatedRoute,
+              private afs: AngularFirestore,
+              private fb: FormBuilder) { }
 
   async ngOnInit() {
     this.auth.user.subscribe(user => {
@@ -47,12 +57,33 @@ export class ClubDetailPage implements OnInit {
     );
   }
 
+  get nickName() {
+    return this.joinForm.get('nickName');
+  }
+
+  openOverlay() {
+    this.joinForm = this.fb.group({
+      nickName: [this.user.nickName,
+        Validators.required,
+        FirebaseUniqueMemberValidator.options(this.afs, this.club.id)]
+    });
+    this.overlayHidden = false;
+  }
+  closeOverlay(event) {
+    if (!(event.target).closest('#card')) {
+      this.overlayHidden = true;
+    }
+  }
+
   joinClub() {
-    this.clubService.joinClub(this.club.id);
+    if (this.club.options.isPublic) {
+      this.clubService.joinClub(this.club.id, this.joinForm.value);
+    } else {
+      // this.clubService.notifyAdmin(this.club.id, this.joinForm.value);
+    }
   }
 
   leaveClub() {
     this.clubService.leaveClub(this.club.id).then(() => this.isMember = false);
   }
-
 }
