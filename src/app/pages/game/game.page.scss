@@ -1,0 +1,32 @@
+.numberSlider {
+    ion-card {
+        margin-left: 0;
+        margin-right: 0
+    }
+}
+.playerSlider {
+    ion-card {
+        min-width: 100%;
+        margin-left: 0;
+        margin-right: 0
+    }
+}
+
+
+
+.time-badge {
+    min-width: 48px;
+    font-size: 1.8em;
+    position: absolute;
+    left: 70%;
+    top: 75%;
+}
+
+round-progress {
+    background-size: contain;
+    border-radius: 100%;
+}
+
+ion-card-header {
+    padding-bottom: 0;
+}

@@ -9,7 +9,8 @@ const routes: Routes = [
     loadChildren: './pages/view/view.module#ViewPageModule' },
   { path: 'login', loadChildren: './pages/login/login.module#LoginPageModule' },
   { path: 'register', loadChildren: './pages/register/register.module#RegisterPageModule' },
-  { path: 'club-detail', loadChildren: './pages/view/clubs/club-detail/club-detail.module#ClubDetailPageModule' },
+  { path: 'club-detail', loadChildren: './pages/view/clubs/club-detail/club-detail.module#ClubDetailPageModule' },  { path: 'game', loadChildren: './pages/game/game.module#GamePageModule' },
+
 ];
 
 @NgModule({

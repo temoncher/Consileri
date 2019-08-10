@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Игра</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="full-page">
+  <ion-slides #numberSlider class="numberSlider" [options]="firstSliderConfig">
+
+    <ion-slide *ngFor="let player of players">
+      <ion-card (click)="navigateToSlide(player.number-1)">
+        <ion-card-content>
+          <h2><b>{{ player.number }}</b></h2>
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+
+  </ion-slides>
+
+  <ion-slides #playerSlider class="playerSlider" [options]="secondSliderConfig">
+
+    <ion-slide *ngFor="let player of players">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>{{ player.quitPhase }}</ion-card-title>
+          <ion-card-subtitle>{{ player.number }}. {{ player.name }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <div style="position: relative">
+            <round-progress (click)="switchTimer(player.number)"
+              [ngStyle]="{ 'background-image' : 'url(' + player.imageURL + ')' }"
+              [current]="60 - timers[player.number-1].time" [max]="60"
+              [color]="(player.quitPhase || (player.quitPhase === 0) || timers[player.number - 1].ended) ? '#989aa2' : (60 - timers[player.number-1].time) > 10 ? '#3880ff' : '#f04141'"
+              [rounded]="true" [responsive]="true" [duration]="1000" [animation]="'easeInOutCubic'">
+            </round-progress>
+            <ion-badge class="time-badge"
+              [color]="(player.quitPhase || (player.quitPhase === 0) || timers[player.number - 1].ended) ? 'medium' : (60 - timers[player.number-1].time) > 10 ? 'primary' : 'danger'">
+              {{ 60 - timers[player.number-1].time }}</ion-badge>
+          </div>
+          <ion-label>
+            {{ player.proposedPlayers[currentPhase] ? 'Proposed player '+ player.proposedPlayers[currentPhase] : "Didn't propose any player" }}
+          </ion-label>
+          <ion-buttons>
+            <ion-button (click)="proposePlayer(player.number)"
+              [disabled]="player.quitPhase || (player.quitPhase === 0) || timers[player.number - 1].ended">
+              {{!player.proposedPlayers[currentPhase] ? 'Propose' : 'Edit'}}
+            </ion-button>
+            <ion-button (click)="endSpeech(player.number)"
+              [disabled]="player.quitPhase || (player.quitPhase === 0) || timers[player.number - 1].ended">End speech
+            </ion-button>
+          </ion-buttons>
+        </ion-card-content>
+      </ion-card>
+    </ion-slide>
+
+  </ion-slides>
+  <ion-button (click)="logInfo()">
+    Log
+  </ion-button>
+
+</ion-content>
